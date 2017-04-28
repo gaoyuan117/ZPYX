@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingBottom="4dp"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <com.jzbwlkj.zpyx.view.RoundImageView
+        android:id="@+id/img_item_home"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/tv_item_home_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/img_item_home"
+        android:maxLines="2"
+        android:textColor="#402E2E"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_item_home_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_item_home_title"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/img_item_home"
+        android:textColor="#EF3F3F"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_item_home_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#A0A0A0"
+        android:layout_alignBottom="@+id/img_item_home"
+        android:layout_toRightOf="@+id/img_item_home"
+        android:textSize="14sp" />
+    </RelativeLayout>
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/bg"
+        android:layout_below="@id/rl"
+        />
+
+</RelativeLayout>

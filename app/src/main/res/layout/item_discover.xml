@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff">
+
+    <ImageView
+        android:id="@+id/img_item_discover_bg"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:scaleType="centerCrop" />
+
+    <com.jzbwlkj.zpyx.view.CircleImageView
+        android:id="@+id/img_item_discover_avatar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        app:civ_border_color="#FFF"
+        app:civ_border_width="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_item_discover_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img_item_discover_avatar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text=""
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_item_discover_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_item_discover_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:lines="1"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/tv_item_discover_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_item_discover_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="4dp"
+        android:lines="1"
+        android:text=""
+        android:textColor="#A79D9E"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="14dp"
+        android:background="#FBF5F5"
+        android:layout_below="@+id/tv_item_discover_place"
+        />
+
+</RelativeLayout>
