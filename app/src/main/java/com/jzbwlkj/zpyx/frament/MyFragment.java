@@ -1,11 +1,14 @@
 package com.jzbwlkj.zpyx.frament;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,16 +27,21 @@ import com.jzbwlkj.zpyx.rxjava.BaseObjObserver;
 import com.jzbwlkj.zpyx.rxjava.RxBus;
 import com.jzbwlkj.zpyx.rxjava.RxUtils;
 import com.jzbwlkj.zpyx.util.GlideUtils;
+import com.jzbwlkj.zpyx.util.SharePreUtil;
 import com.jzbwlkj.zpyx.util.ShareUtils;
 import com.jzbwlkj.zpyx.view.MyViewPager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.functions.Consumer;
 
@@ -41,7 +49,7 @@ import io.reactivex.functions.Consumer;
  * Created by admin on 2017/4/11.
  */
 
-public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener, SwipeRefreshLayout.OnRefreshListener {
+public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetChangedListener, SwipeRefreshLayout.OnRefreshListener, PlatformActionListener {
 
     @BindView(R.id.img_my_set)
     ImageView mSet;
@@ -79,6 +87,7 @@ public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetCha
     private List<String> titles;
     public SingleFragment singleFragment;
     public CollectFragment collectFragment;
+    private String uid;
 
     @Override
     protected View loadLayout(LayoutInflater inflater) {
@@ -101,6 +110,8 @@ public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetCha
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager(), fragments, titles);
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setAdapter(viewPagerAdapter);
+        uid = new SharePreUtil("user").get("uid");
+        Log.e("gy", "uid：" + uid);
     }
 
     @Override
@@ -123,7 +134,7 @@ public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetCha
         mTabLayout.post(new Runnable() {
             @Override
             public void run() {
-                setIndicator(mTabLayout,50,50);
+                setIndicator(mTabLayout, 50, 50);
             }
         });
     }
@@ -132,28 +143,28 @@ public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetCha
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_my_fbrz:
-                toActivity("mine/log/add_log.html");
+                toActivity("mine/log/add_log.html", "");
                 break;
             case R.id.tv_my_tjsp:
-                toActivity("mine/goods/add_goods.html");
+                toActivity("mine/goods/add_goods.html", "");
                 break;
             case R.id.tv_my_wdrz:
-                toActivity("mine/log/index.html");
+                toActivity("mine/log/index.html", "");
                 break;
             case R.id.tv_my_yqhy:
-                ShareUtils.share(getActivity(), "http://zhaiwushuo.jzbwlkj.com/logo2.jpg");
+                share(getActivity(), "http://zhaiwushuo.jzbwlkj.com/html/zhuce.html?userid=" + uid);
                 break;
             case R.id.img_my_set:
-                toActivity("mine/setting/index.html");
+                toActivity("mine/setting/index.html", "");
                 break;
             case R.id.img_my_avatar:
-                toActivity("mine/setting/heder_pic.html");
+                toActivity("mine/setting/heder_pic.html", "");
                 break;
             case R.id.img_my_qd:
-                toActivity("mine/sign.html");
+                toActivity("mine/sign.html", "");
                 break;
             case R.id.img_my_jf:
-                toActivity("shop/index.html");
+                toActivity("shop/index.html", "");
                 break;
         }
     }
@@ -197,6 +208,8 @@ public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetCha
         super.onHiddenChanged(hidden);
         if (!hidden) {
             getUserInfo();
+            singleFragment.getCollect();
+            collectFragment.getCollect();
         }
     }
 
@@ -233,5 +246,52 @@ public class MyFragment extends BaseFragment implements AppBarLayout.OnOffsetCha
             child.setLayoutParams(params);
             child.invalidate();
         }
+    }
+
+    public void share(Context context, String url) {
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间等使用
+        oks.setTitle("买手大叔");
+        // titleUrl是标题的网络链接，QQ和QQ空间等使用
+        oks.setTitleUrl(url);
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText("买手大叔");
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl(url);
+        oks.setImageUrl("http://zhaiwushuo.jzbwlkj.com/html/images/logo2.png"); // 必须有图片路径才能在微信分享有标题
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+        oks.setComment("买手大叔");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        oks.setSite(context.getString(R.string.app_name));
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl("http://zhaiwushuo.jzbwlkj.com/html/images/logo2.png");
+        // 启动分享GUI
+//        oks.setCallback(this);
+        oks.show(context);
+    }
+
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                //TODO 调用接口
+                Toast.makeText(mActivity, "分享成功", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+
     }
 }

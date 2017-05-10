@@ -47,6 +47,8 @@ public class LoginActivity extends BaseActivity implements CountDownUtils.Countd
     ImageView sex;
     @BindView(R.id.tv_login_name)
     TextView name;
+    @BindView(R.id.img_login_back)
+    ImageView back;
 
     private CountDownUtils countDown;
     private String phone, code;
@@ -91,7 +93,7 @@ public class LoginActivity extends BaseActivity implements CountDownUtils.Countd
         countDown.setCountdownListener(this);
     }
 
-    @OnClick({R.id.tv_login_getcode, R.id.tv_login})
+    @OnClick({R.id.tv_login_getcode, R.id.tv_login,R.id.img_login_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_login_getcode:
@@ -114,6 +116,9 @@ public class LoginActivity extends BaseActivity implements CountDownUtils.Countd
                     return;
                 }
                 login();
+                break;
+            case R.id.img_login_back:
+                finish();
                 break;
         }
     }
@@ -160,6 +165,7 @@ public class LoginActivity extends BaseActivity implements CountDownUtils.Countd
                 .putString("name", bean.getUser_nickname())
                 .putString("avatar", bean.getUser_portrait())
                 .putString("sex", bean.getUser_sex() + "")
+                .putString("uid",bean.getUser_id()+"")
                 .commit();
     }
 

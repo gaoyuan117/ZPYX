@@ -12,7 +12,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 
 public class ShareUtils {
 
-    public static void share(Context context, String url) {
+    public static OnekeyShare share(Context context, String url) {
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
@@ -35,5 +35,6 @@ public class ShareUtils {
         oks.setSiteUrl("http://zhaiwushuo.jzbwlkj.com/logo2.jpg");
         // 启动分享GUI
         oks.show(context);
+        return oks;
     }
 }

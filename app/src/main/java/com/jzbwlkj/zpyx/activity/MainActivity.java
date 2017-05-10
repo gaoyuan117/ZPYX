@@ -2,10 +2,15 @@ package com.jzbwlkj.zpyx.activity;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -13,14 +18,22 @@ import android.widget.Toast;
 
 import com.jzbwlkj.zpyx.R;
 import com.jzbwlkj.zpyx.base.BaseActivity;
+import com.jzbwlkj.zpyx.config.Config;
 import com.jzbwlkj.zpyx.frament.HomeFragment;
 import com.jzbwlkj.zpyx.frament.MyFragment;
 import com.jzbwlkj.zpyx.frament.DiscoverFragment;
+import com.jzbwlkj.zpyx.rxjava.RxUtils;
+import com.jzbwlkj.zpyx.util.AppManager;
+import com.jzbwlkj.zpyx.util.SharePreUtil;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
 
@@ -36,6 +49,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     LinearLayout llMainReplace;
     @BindView(R.id.activity_main)
     LinearLayout activityMain;
+    @BindView(R.id.img_main_start)
+    ImageView startImg;
     public static MainActivity activity;
 
     private List<Fragment> mList;
@@ -46,11 +61,15 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     private DiscoverFragment navigationFragment;
     private MyFragment myFragment;
     private NotificationManager manager;
+    private SharePreUtil shareUtil;
+    private boolean isFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        delay();
+        Log.e("gy","onCreate");
     }
 
 
@@ -60,6 +79,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mList = new ArrayList<>();
         mRadioButtos = new ArrayList<>();
+        shareUtil = new SharePreUtil("user");
     }
 
     @Override
@@ -100,6 +120,31 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             }
         }
         chooseFragment();
+    }
+
+    private void delay() {
+        if (!TextUtils.isEmpty(shareUtil.get("token"))) {
+            Config.TOKEN = shareUtil.get("token");
+            Logger.d("token：" + Config.TOKEN);
+            isFirst = false;
+        } else {
+            isFirst = true;
+        }
+
+        Observable.just(1)
+                .delay(3, TimeUnit.SECONDS)
+                .compose(RxUtils.<Integer>io_main())
+                .subscribe(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer integer) throws Exception {
+                        if (isFirst) {
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            finish();
+                        } else {
+                            startImg.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 
     /**
@@ -144,6 +189,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     return true;
                 } else {//两次按键小于2秒时，退出应用
 //                    LoginActivity.loginActivity.finish();
+                    AppManager.getAppManager().finishAllActivity();
                     System.exit(0);
                 }
                 break;
@@ -154,6 +200,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        finish();
+        Log.e("gy","onDestroy");
     }
 }

@@ -16,16 +16,27 @@
         android:background="@color/bg"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/orgener"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:text="登录"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+       <RelativeLayout
+           android:background="@color/orgener"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <ImageView
+               android:id="@+id/img_login_back"
+               android:layout_width="40dp"
+               android:layout_height="20dp"
+               android:src="@mipmap/fanhui"
+               android:layout_centerVertical="true"
+               />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:padding="16dp"
+               android:layout_centerInParent="true"
+               android:text="登录"
+               android:textColor="@color/black"
+               android:textSize="18sp" />
+       </RelativeLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_login_avatar"
@@ -79,7 +90,7 @@
                 android:drawableLeft="@mipmap/shouji"
                 android:drawablePadding="16dp"
                 android:hint="输入手机号"
-                android:inputType="phone"
+                android:inputType="number"
                 android:maxLength="11" />
 
             <TextView

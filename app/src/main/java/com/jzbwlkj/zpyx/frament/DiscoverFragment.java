@@ -35,6 +35,7 @@ import io.reactivex.functions.Consumer;
 
 /**
  * Created by admin on 2017/4/11.
+ *
  */
 
 public class DiscoverFragment extends BaseFragment implements View.OnClickListener, BaseQuickAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, OnBannerClickListener, BaseQuickAdapter.RequestLoadMoreListener {
@@ -156,14 +157,14 @@ public class DiscoverFragment extends BaseFragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_discover_ss:
-                toActivity("search/search.html");
+                toActivity("search/search.html","");
                 break;
         }
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        toActivity("log/detail.html?id=" + mList.get(position).getLog_id());
+        toActivity("log/detail.html?id=" + mList.get(position).getLog_id(),mList.get(position).getLog_id());
     }
 
     @Override

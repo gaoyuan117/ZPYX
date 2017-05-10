@@ -48,11 +48,12 @@
                     android:layout_height="wrap_content"
                     android:background="#fff"
                     app:tabIndicatorColor="@color/orgener"
-                    app:tabSelectedTextColor="#4D4D4D"
-                    app:tabTextColor="#A7A7A7" />
+                    app:tabSelectedTextColor="#000000"
+                    app:tabTextColor="#000000" />
             </android.support.design.widget.AppBarLayout>
 
             <com.jzbwlkj.zpyx.view.MyViewPager
+                android:layout_marginTop="4dp"
                 android:id="@+id/vp_my"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

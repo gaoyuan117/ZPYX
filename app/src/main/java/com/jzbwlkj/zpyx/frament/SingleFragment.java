@@ -22,6 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by admin on 2017/4/12.
@@ -87,11 +88,13 @@ public class SingleFragment extends BaseFragment implements BaseQuickAdapter.OnI
                         RxBus.getInstance().send("1");
                     }
                 })
-                .subscribe(new BaseListObserver<GoodChooseBean>(false) {
+                .subscribe(new Consumer<HttpArray<GoodChooseBean>>() {
                     @Override
-                    protected void onHandleSuccess(List<GoodChooseBean> list) {
+                    public void accept(HttpArray<GoodChooseBean> goodChooseBeanHttpArray) throws Exception {
                         mList.clear();
-                        mList.addAll(list);
+                        if (goodChooseBeanHttpArray.data != null) {
+                            mList.addAll(goodChooseBeanHttpArray.data);
+                        }
                         homeAdapter.setEnableLoadMore(false);
                         homeAdapter.notifyDataSetChanged();
                         RxBus.getInstance().send("1");
@@ -101,6 +104,6 @@ public class SingleFragment extends BaseFragment implements BaseQuickAdapter.OnI
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        toActivity("shop/goods_info.html?goods_id=" + mList.get(position).getGoods_id());
+        toActivity("shop/goods_info.html?goods_id=" + mList.get(position).getGoods_id(),mList.get(position).getGoods_id()+"");
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import java.util.Map;
 public abstract class BaseFragment extends Fragment {
 
     public Activity mActivity;
-    public Map<String,String> maps;
+    public Map<String, String> maps;
     private Intent intent;
 
 
@@ -59,12 +60,13 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void set();
 
-    public void toActivity(String url){
-        if(url.contains("?")){
-            intent.putExtra("url","http://zhaiwushuo.jzbwlkj.com/html/"+url+"&token="+Config.TOKEN);
-        }else {
-            intent.putExtra("url","http://zhaiwushuo.jzbwlkj.com/html/"+url+"?token="+Config.TOKEN);
+    public void toActivity(String url, String id) {
+        if (url.contains("?")) {
+            intent.putExtra("url", "http://zhaiwushuo.jzbwlkj.com/html/" + url + "&token=" + Config.TOKEN);
+        } else {
+            intent.putExtra("url", "http://zhaiwushuo.jzbwlkj.com/html/" + url + "?token=" + Config.TOKEN);
         }
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 }

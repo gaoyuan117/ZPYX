@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by admin on 2017/4/12.
@@ -80,21 +81,21 @@ public class CollectFragment extends BaseFragment implements BaseQuickAdapter.On
         RetrofitClient.getInstance().createApi()
                 .getRzCollect(maps)
                 .compose(RxUtils.<HttpArray<DiscoverBean>>io_main())
-                .subscribe(new BaseListObserver<DiscoverBean>(false) {
+                .subscribe(new Consumer<HttpArray<DiscoverBean>>() {
                     @Override
-                    protected void onHandleSuccess(List<DiscoverBean> list) {
+                    public void accept(HttpArray<DiscoverBean> discoverBeanHttpArray) throws Exception {
                         mList.clear();
-                        if (list != null) {
-                            mList.addAll(list);
-                            mAdapter.setEnableLoadMore(false);
-                            mAdapter.notifyDataSetChanged();
+                        if (discoverBeanHttpArray.data != null) {
+                            mList.addAll(discoverBeanHttpArray.data);
                         }
+                        mAdapter.setEnableLoadMore(false);
+                        mAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        toActivity("log/detail.html?id="+mList.get(position).getLog_id());
+        toActivity("log/detail.html?id="+mList.get(position).getLog_id(),mList.get(position).getLog_id()+"");
     }
 }

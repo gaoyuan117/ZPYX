@@ -9,6 +9,15 @@
     android:background="@color/orgener"
     tools:context="com.jzbwlkj.zpyx.activity.MainActivity">
 
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/img_main_start"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/start_up_page"
+        android:scaleType="centerCrop"
+        />
+
     <LinearLayout
         android:background="#FFFFFF"
         android:id="@+id/ll_main_replace"

@@ -4,6 +4,7 @@ import com.jzbwlkj.zpyx.bean.CommonBean;
 import com.jzbwlkj.zpyx.bean.DiscoverAdBean;
 import com.jzbwlkj.zpyx.bean.DiscoverBean;
 import com.jzbwlkj.zpyx.bean.GoodChooseBean;
+import com.jzbwlkj.zpyx.bean.GuideBean;
 import com.jzbwlkj.zpyx.bean.HomeBannerBean;
 import com.jzbwlkj.zpyx.bean.LoginBean;
 import com.jzbwlkj.zpyx.bean.RecommendBean;
@@ -23,6 +24,14 @@ import retrofit2.http.POST;
  */
 
 public interface Api {
+
+    /**
+     * 获取启动页图片
+     */
+    @FormUrlEncoded
+    @POST("api/base/startUpPic")
+    Observable<HttpResult<GuideBean>> guidePic(@FieldMap Map<String, String> map);
+
 
     /**
      * 获取验证码
@@ -107,6 +116,6 @@ public interface Api {
      */
     @FormUrlEncoded
     @POST("api/Integral/Share")
-    Observable<HttpArray<DiscoverBean>> shareSuccess(@FieldMap Map<String, String> map);
+    Observable<HttpResult<CommonBean>> shareSuccess(@FieldMap Map<String, String> map);
 
 }

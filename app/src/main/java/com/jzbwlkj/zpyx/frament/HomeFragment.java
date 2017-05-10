@@ -1,6 +1,7 @@
 package com.jzbwlkj.zpyx.frament;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jzbwlkj.zpyx.App;
 import com.jzbwlkj.zpyx.R;
 import com.jzbwlkj.zpyx.activity.WebViewActivity;
 import com.jzbwlkj.zpyx.adapter.HomeAdapter;
@@ -68,7 +71,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     RoundImageView headImg3;
     TextView headTitle3;
     TextView headMoney3;
-    LinearLayout tj;
+    TextView tvTuiJian;
+    ImageView tj;
 
     private HomeAdapter mAdapter;
     private List<GoodChooseBean> mList;
@@ -89,6 +93,10 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     protected void init(View view) {
         headView = View.inflate(getActivity(), R.layout.head_home, null);
         mList = new ArrayList<>();
+        if (App.goodsList.size() > 0) {
+            mList.addAll(App.goodsList);
+        }
+
         bannerList = new ArrayList<>();
         bannerBeenList = new ArrayList<>();
         initHeadView();
@@ -97,7 +105,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter.addHeaderView(headView);
         mAdapter.setEnableLoadMore(true);
-        mAdapter.setOnLoadMoreListener(this,mRecyclerView);
+        mAdapter.setOnLoadMoreListener(this, mRecyclerView);
+
+        if (App.recommenflist.size() > 0) {
+            initRecommend(App.recommenflist);
+        }
+        if (App.bannerList.size() > 0) {
+            setBanner(App.bannerList);
+        }
     }
 
     @Override
@@ -126,7 +141,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     private void initHeadView() {
         mBanner = (Banner) headView.findViewById(R.id.banner);
 
-        tj = (LinearLayout) headView.findViewById(R.id.img_tj);
+        tj = (ImageView) headView.findViewById(R.id.img_tj);
         headImg1 = (RoundImageView) headView.findViewById(R.id.img1_home_tj);
         headImg2 = (RoundImageView) headView.findViewById(R.id.img2_home_tj);
         headImg3 = (RoundImageView) headView.findViewById(R.id.img3_home_tj);
@@ -142,6 +157,11 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         ll1 = (LinearLayout) headView.findViewById(R.id.ll1_home);
         ll2 = (LinearLayout) headView.findViewById(R.id.ll2_home);
         ll3 = (LinearLayout) headView.findViewById(R.id.ll3_home);
+
+        tvTuiJian = (TextView) headView.findViewById(R.id.tv_home_tuijian);
+
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "text_type.OTF");
+        tvTuiJian.setTypeface(typeface);
     }
 
     private void loadBanner() {
@@ -202,7 +222,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void loadGoodChoose(final int page) {
-        maps.put("page",page+"");
+        maps.put("page", page + "");
         RetrofitClient.getInstance().createApi()
                 .goodChoose(maps)
                 .compose(RxUtils.<HttpArray<GoodChooseBean>>io_main())
@@ -216,7 +236,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 .subscribe(new BaseListObserver<GoodChooseBean>(mAdapter) {
                     @Override
                     protected void onHandleSuccess(List<GoodChooseBean> list) {
-                        if(page==1){
+                        if (page == 1) {
                             mList.clear();
                         }
                         mList.addAll(list);
@@ -249,6 +269,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        hasNews();
+    }
+
     /**
      * set Banner
      */
@@ -276,24 +302,24 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_home_xiaoxi:
-                toActivity("mine/message/index.html");
+                toActivity("mine/message/index.html", "");
                 break;
             case R.id.rl_home_ss:
-                toActivity("search/search.html");
+                toActivity("search/search.html", "");
                 break;
             case R.id.ll1_home:
                 if (recommendList.size() >= 0) {
-                    toActivity("shop/goods_info.html?goods_id=" + recommendList.get(0).getGoods_id());
+                    toActivity("shop/goods_info.html?goods_id=" + recommendList.get(0).getGoods_id(), recommendList.get(0).getGoods_id() + "");
                 }
                 break;
             case R.id.ll2_home:
                 if (recommendList.size() > 1) {
-                    toActivity("shop/goods_info.html?goods_id=" + recommendList.get(1).getGoods_id());
+                    toActivity("shop/goods_info.html?goods_id=" + recommendList.get(1).getGoods_id(), recommendList.get(1).getGoods_id() + "");
                 }
                 break;
             case R.id.ll3_home:
                 if (recommendList.size() >= 2) {
-                    toActivity("shop/goods_info.html?goods_id=" + recommendList.get(2).getGoods_id());
+                    toActivity("shop/goods_info.html?goods_id=" + recommendList.get(2).getGoods_id(), recommendList.get(2).getGoods_id() + "");
                 }
                 break;
         }
@@ -301,7 +327,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        toActivity("shop/goods_info.html?goods_id=" + mList.get(position).getGoods_id());
+        toActivity("shop/goods_info.html?goods_id=" + mList.get(position).getGoods_id(), mList.get(position).getGoods_id() + "");
     }
 
     @Override
@@ -313,7 +339,8 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onRefresh() {
-        page =1;
+        page = 1;
+        hasNews();
         loadBanner();
         loadRecommend();
         loadGoodChoose(page);

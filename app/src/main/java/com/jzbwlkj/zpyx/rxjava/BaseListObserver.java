@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jzbwlkj.zpyx.App;
+import com.jzbwlkj.zpyx.adapter.DiscoverAdapter;
 import com.jzbwlkj.zpyx.adapter.HomeAdapter;
 import com.jzbwlkj.zpyx.config.CommonDialog;
 import com.jzbwlkj.zpyx.config.HttpArray;
@@ -32,6 +33,10 @@ public abstract class BaseListObserver<T> implements Observer<HttpArray<T>> {
     }
     protected BaseListObserver(BaseQuickAdapter adapter) {
         this.adapter = adapter;
+    }
+    protected BaseListObserver(BaseQuickAdapter adapter,boolean isToast) {
+        this.adapter = adapter;
+        this.isToast = isToast;
     }
 
     protected BaseListObserver(boolean isToast) {
@@ -90,9 +95,14 @@ public abstract class BaseListObserver<T> implements Observer<HttpArray<T>> {
                 adapter.loadMoreEnd();
             }
         }
-
         if(isToast){
-            Toast.makeText(App.app, msg, Toast.LENGTH_SHORT).show();
+            if(adapter instanceof HomeAdapter){
+                Toast.makeText(App.app, "没有更多优选商品了!", Toast.LENGTH_SHORT).show();
+            }else if(adapter instanceof DiscoverAdapter){
+                Toast.makeText(App.app, "没有更多日志了", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(App.app, msg, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

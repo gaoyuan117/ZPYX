@@ -10,17 +10,22 @@
 
     <WebView
         android:background="#FFFFFF"
-        android:id="@+id/web"
+        android:id="@+id/web2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="1dp"
+        android:layout_centerVertical="true"
+        android:layout_height="1dp"/>
+
     <ImageView
+        android:layout_marginTop="70dp"
+        android:layout_below="@+id/view"
         android:id="@+id/img_web_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/web_back"
-        android:layout_marginTop="260dp"
-        android:visibility="gone"
-        />
+        android:src="@mipmap/web_back" />
 
 </RelativeLayout>

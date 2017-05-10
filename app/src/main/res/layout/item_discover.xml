@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
         app:civ_border_color="#FFF"
-        app:civ_border_width="2dp"/>
+        app:civ_border_width="2dp" />
 
     <TextView
         android:id="@+id/tv_item_discover_name"
@@ -28,7 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
         android:text=""
-        android:textColor="@color/black" />
+        android:textColor="#1d1d1d" />
 
     <TextView
         android:id="@+id/tv_item_discover_title"
@@ -37,9 +37,11 @@
         android:layout_below="@+id/tv_item_discover_name"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="4dp"
-        android:lines="1"
+        android:maxLines="2"
         android:text=""
-        android:textColor="@color/black"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:textColor="#1d1d1d"
         android:textSize="16sp" />
 
 
@@ -53,14 +55,12 @@
         android:layout_marginTop="4dp"
         android:lines="1"
         android:text=""
-        android:textColor="#A79D9E"
-        android:textSize="14sp" />
+        android:textColor="#B8B8B8" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="14dp"
-        android:background="#FBF5F5"
         android:layout_below="@+id/tv_item_discover_place"
-        />
+        android:background="#FBF5F5" />
 
 </RelativeLayout>
